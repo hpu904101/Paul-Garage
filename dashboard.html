@@ -2,134 +2,173 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>Paul Garage 後台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Paul Garage</title>
 
 <style>
 body{
-  margin:0;
-  font-family:Arial;
-  background:#111;
-  color:#fff;
+    margin:0;
+    font-family:"Microsoft JhengHei", sans-serif;
+    background:#f4f4f4;
 }
 
-h2{
-  text-align:center;
-  padding:15px;
+header{
+    background:#0f0f0f;
+    color:#fff;
+    padding:18px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
 }
 
-.container{
-  width:90%;
-  max-width:500px;
-  margin:20px auto;
-  background:#1c1c1c;
-  padding:20px;
-  border-radius:10px;
+.hero{
+    background:#000;
+    position:relative;
+    height:520px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
 }
 
-input{
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border:none;
-  border-radius:6px;
+.hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:contain;
+    transform:scale(1.05);
 }
 
-button{
-  width:100%;
-  padding:10px;
-  margin-top:8px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:bold;
+.hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,0.2),rgba(0,0,0,0.75));
 }
 
-.addBtn{background:#00c300;color:#fff;}
-.logoutBtn{background:#555;color:#fff;}
-
-.car{
-  background:#2a2a2a;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
+.hero-content{
+    position:relative;
+    z-index:2;
+    color:#fff;
+    text-align:center;
 }
 
-.car img{
-  width:100%;
-  border-radius:6px;
+.hero h1{
+    font-size:32px;
 }
 
-/* 修改視窗 */
-#editBox{
-  display:none;
-  position:fixed;
-  top:10%;
-  left:50%;
-  transform:translateX(-50%);
-  width:90%;
-  max-width:400px;
-  background:#222;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 0 20px rgba(0,0,0,0.5);
-  z-index:999;
+.line-btn{
+    display:inline-block;
+    padding:10px 16px;
+    background:#00c300;
+    color:#fff;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+.section{
+    padding:25px 15px;
+    max-width:1100px;
+    margin:auto;
+}
+
+.title{
+    text-align:center;
+    font-size:22px;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+}
+
+.card{
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.card-body{
+    padding:12px;
+}
+
+.car-name{font-weight:bold;}
+.price{color:red;font-weight:bold;}
+.desc{font-size:13px;color:#666;}
+
+.card a{
+    display:inline-block;
+    margin-top:10px;
+    background:#111;
+    color:#fff;
+    padding:8px 10px;
+    border-radius:6px;
+    text-decoration:none;
+}
+
+.fixed-line{
+    position:fixed;
+    right:15px;
+    bottom:15px;
+    background:#00c300;
+    color:#fff;
+    padding:12px 14px;
+    border-radius:50px;
+    text-decoration:none;
+}
+
+.admin-btn{
+    position:fixed;
+    top:15px;
+    right:15px;
+    background:#111;
+    color:#fff;
+    padding:10px 16px;
+    border-radius:8px;
+    text-decoration:none;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🚗 車商後台 Dashboard</h2>
+<header>Paul Garage｜嚴選好車</header>
 
-<!-- 上架 -->
-<div class="container">
-  <h3>新增車輛</h3>
+<a href="admin.html" class="admin-btn">登入</a>
 
-  <input id="name" placeholder="車名">
-  <input id="price" placeholder="價格">
-  <input id="img" placeholder="圖片網址">
-  <input id="desc" placeholder="描述">
-
-  <button class="addBtn" onclick="addCar()">上架車輛</button>
-  <button class="logoutBtn" onclick="logout()">登出</button>
+<div class="hero">
+  <div class="hero-content">
+    <h1>優質外匯車 / 中古車</h1>
+    <a class="line-btn" href="https://line.me/ti/p/~k9527">LINE 立即詢問</a>
+  </div>
 </div>
 
-<!-- 列表 -->
-<div class="container">
-  <h3>車輛列表</h3>
-  <div id="list"></div>
+<div class="section">
+  <div class="title">熱門車輛</div>
+  <div class="grid" id="cars"></div>
 </div>
 
-<!-- 修改 -->
-<div id="editBox">
-  <h3>修改車輛</h3>
-
-  <input id="eName" placeholder="車名">
-  <input id="ePrice" placeholder="價格">
-  <input id="eImg" placeholder="圖片網址">
-  <input id="eDesc" placeholder="描述">
-
-  <button style="background:#00c300;color:#fff;" onclick="saveEdit()">儲存修改</button>
-  <button style="background:#555;color:#fff;" onclick="closeEdit()">取消</button>
-</div>
+<a class="fixed-line" href="https://line.me/ti/p/~k9527">LINE</a>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-  getAuth, signOut, onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  updateDoc,
-  doc,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBMRylaUJ3dI7KeA7vKN0FWPADnElPgIbY",
@@ -138,115 +177,40 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔐 登入檢查
-onAuthStateChanged(auth,(user)=>{
-  if(!user){
-    window.location.href="admin.html";
-  }
-});
+async function loadCars(){
 
-// 🚪 登出
-window.logout = function(){
-  signOut(auth).then(()=>{
-    window.location.href="admin.html";
-  });
-};
+  const snap = await getDocs(collection(db,"cars"));
 
-// 🚗 上架
-window.addCar = async function(){
-
-  const name = nameInput.value;
-  const price = priceInput.value;
-  const img = imgInput.value;
-  const desc = descInput.value;
-
-  await addDoc(collection(db,"cars"),{
-    name,price,img,desc,
-    active:true
-  });
-
-  alert("上架成功");
-};
-
-// 📦 即時列表
-const list = document.getElementById("list");
-
-onSnapshot(collection(db,"cars"),(snap)=>{
-
-  list.innerHTML="";
+  let html="";
 
   snap.forEach(d=>{
-    const c = d.data();
+    const c=d.data();
 
-    list.innerHTML += `
-      <div class="car">
+    if(c.active===false) return;
+
+    html+=`
+      <div class="card">
         <img src="${c.img}">
-        <b>${c.name}</b><br>
-        ${c.price}<br>
-        ${c.desc||""}<br>
+        <div class="card-body">
+          <div class="car-name">${c.name}</div>
+          <div class="price">${c.price}</div>
+          <div class="desc">${c.desc||""}</div>
 
-        <button onclick="openEdit('${d.id}','${c.name}','${c.price}','${c.img}','${c.desc||""}')">
-          修改
-        </button>
+          <a target="_blank" href="https://line.me/ti/p/~k9527">
+            LINE詢問
+          </a>
 
-        <button onclick="toggle('${d.id}',${c.active})">
-          ${c.active ? "下架" : "上架"}
-        </button>
-
-        <button onclick="del('${d.id}')">刪除</button>
+        </div>
       </div>
     `;
   });
-});
 
-// 🔁 上下架
-window.toggle = async function(id,state){
-  await updateDoc(doc(db,"cars",id),{
-    active:!state
-  });
-};
+  document.getElementById("cars").innerHTML=html;
+}
 
-// 🗑 刪除
-window.del = async function(id){
-  if(confirm("確定刪除？")){
-    await deleteDoc(doc(db,"cars",id));
-  }
-};
-
-// ✏️ 開啟修改
-window.openEdit = function(id,name,price,img,desc){
-
-  window.editId = id;
-
-  document.getElementById("editBox").style.display="block";
-
-  eName.value = name;
-  ePrice.value = price;
-  eImg.value = img;
-  eDesc.value = desc;
-};
-
-// ❌ 關閉
-window.closeEdit = function(){
-  document.getElementById("editBox").style.display="none";
-};
-
-// 💾 儲存修改
-window.saveEdit = async function(){
-
-  await updateDoc(doc(db,"cars",window.editId),{
-    name:eName.value,
-    price:ePrice.value,
-    img:eImg.value,
-    desc:eDesc.value
-  });
-
-  alert("修改成功");
-  closeEdit();
-};
+loadCars();
 
 </script>
 
