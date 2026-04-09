@@ -142,6 +142,20 @@ header{
     font-weight:bold;
     box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
+
+/* 🔥 後台按鈕 */
+.admin-btn{
+    position:fixed;
+    top:15px;
+    right:15px;
+    background:#111;
+    color:#fff;
+    padding:10px 16px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+    z-index:9999;
+}
 </style>
 </head>
 
@@ -150,6 +164,11 @@ header{
 <header>
 Paul Garage｜嚴選好車・立即預約賞車・全台服務
 </header>
+
+<!-- 🔐 後台登入按鈕 -->
+<a href="admin.html" class="admin-btn">
+  後台登入
+</a>
 
 <!-- HERO -->
 <div class="hero">
@@ -163,7 +182,6 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
 <div class="section">
     <div class="title">熱門車輛</div>
 
-    <!-- ⚠️ 這個一定要有 -->
     <div class="grid" id="cars"></div>
 </div>
 
