@@ -49,7 +49,11 @@ header{
     content:"";
     position:absolute;
     inset:0;
-    background:linear-gradient(to bottom,rgba(0,0,0,0.2),rgba(0,0,0,0.7));
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.20),
+        rgba(0,0,0,0.70)
+    );
 }
 
 .hero-content{
@@ -59,7 +63,10 @@ header{
     text-align:center;
 }
 
-.hero h1{font-size:32px;}
+.hero h1{
+    font-size:32px;
+    margin-bottom:10px;
+}
 
 .line-btn{
     display:inline-block;
@@ -133,6 +140,7 @@ header{
     border-radius:50px;
     text-decoration:none;
     font-weight:bold;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 </style>
 </head>
@@ -151,23 +159,23 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
     </div>
 </div>
 
-<!-- 車輛 -->
+<!-- 🔥 Firebase 車輛區 -->
 <div class="section">
     <div class="title">熱門車輛</div>
+
+    <!-- ⚠️ 這個一定要有 -->
     <div class="grid" id="cars"></div>
 </div>
 
+<!-- LINE -->
 <a class="fixed-line" href="https://line.me/" target="_blank">LINE</a>
 
 <!-- Firebase -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-getFirestore,
-collection,
-getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyBCaOaKY7XDFK2YAqmVfluDG1qazh8b-1E",
@@ -180,7 +188,7 @@ appId: "1:840060743662:web:1d2c61b95095d7298928ff"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 🚗 讀取車子
+// 🚗 讀取車輛
 async function loadCars(){
 
 const snap = await getDocs(collection(db,"cars"));
