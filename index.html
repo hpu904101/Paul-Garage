@@ -22,7 +22,7 @@ header{
     font-weight:bold;
 }
 
-/* 🔵 HERO（已修正：不裁切版本） */
+/* 🔵 HERO（關鍵修正區） */
 .hero{
     position:relative;
     height:320px;
@@ -30,20 +30,38 @@ header{
     display:flex;
     align-items:center;
     justify-content:center;
-    color:#fff;
     text-align:center;
+    color:#fff;
 }
 
-/* 背景圖片改成 img 控制（避免 cover 裁切問題） */
-.hero img{
+/* 🔥 背景模糊填滿層（避免空白） */
+.hero-bg{
     position:absolute;
-    width:100%;
-    height:100%;
-    object-fit:cover; /* 電腦好看 */
+    inset:0;
+    background:url("520413253_122128191266841841_517358859357023635_n.jpg") center/cover no-repeat;
+    filter:blur(10px);
+    transform:scale(1.1);
     z-index:0;
 }
 
-/* 遮罩 */
+/* 🔥 主圖（完整顯示不裁切） */
+.hero-img{
+    position:relative;
+    z-index:1;
+    height:100%;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.hero-img img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain; /* ✔ 核心：完全不裁切 */
+}
+
+/* 🔥 漸層 */
 .hero::after{
     content:"";
     position:absolute;
@@ -53,13 +71,14 @@ header{
         rgba(0,0,0,0.35),
         rgba(0,0,0,0.75)
     );
-    z-index:1;
+    z-index:2;
 }
 
+/* 文字 */
 .hero-content{
-    position:relative;
-    z-index:2;
-    padding:10px;
+    position:absolute;
+    z-index:3;
+    text-align:center;
 }
 
 .hero h1{
@@ -78,7 +97,7 @@ header{
     font-weight:bold;
 }
 
-/* 🔵 區塊 */
+/* 區塊 */
 .section{
     padding:25px 15px;
     max-width:1100px;
@@ -92,7 +111,7 @@ header{
     font-weight:bold;
 }
 
-/* 🔵 車輛 */
+/* 車輛 */
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -104,11 +123,6 @@ header{
     border-radius:12px;
     overflow:hidden;
     box-shadow:0 3px 10px rgba(0,0,0,0.1);
-    transition:0.2s;
-}
-
-.card:hover{
-    transform:translateY(-4px);
 }
 
 .card img{
@@ -148,7 +162,7 @@ header{
     font-size:13px;
 }
 
-/* 🔵 固定 LINE */
+/* LINE */
 .fixed-line{
     position:fixed;
     right:15px;
@@ -162,7 +176,7 @@ header{
     box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* 🔵 手機優化 */
+/* 手機 */
 @media(max-width:768px){
     .hero{
         height:260px;
@@ -171,13 +185,8 @@ header{
     .hero h1{
         font-size:20px;
     }
-
-    header{
-        font-size:16px;
-    }
 }
 </style>
-
 </head>
 
 <body>
@@ -189,8 +198,13 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
 <!-- HERO -->
 <div class="hero">
 
-    <!-- 🔥 你的背景圖 -->
-    <img src="520413253_122128191266841841_517358859357023635_n.jpg">
+    <!-- 模糊背景 -->
+    <div class="hero-bg"></div>
+
+    <!-- 主圖（不裁切） -->
+    <div class="hero-img">
+        <img src="520413253_122128191266841841_517358859357023635_n.jpg">
+    </div>
 
     <div class="hero-content">
         <h1>優質外匯車 / 中古車專賣</h1>
@@ -198,6 +212,7 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
             LINE 立即詢問
         </a>
     </div>
+
 </div>
 
 <!-- 車輛區 -->
@@ -240,9 +255,7 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
 </div>
 
 <!-- LINE -->
-<a class="fixed-line" href="https://line.me/" target="_blank">
-LINE
-</a>
+<a class="fixed-line" href="https://line.me/" target="_blank">LINE</a>
 
 </body>
 </html>
