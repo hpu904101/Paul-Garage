@@ -195,8 +195,7 @@ window.addCar = async function(){
 /* 📦 即時列表 */
 const list = document.getElementById("list");
 
-const q = query(collection(db,"cars"),orderBy("time","desc"));
-
+orderBy("time","desc")
 onSnapshot(q,(snap)=>{
 
   list.innerHTML = "";
