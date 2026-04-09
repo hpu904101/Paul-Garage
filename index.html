@@ -3,88 +3,246 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>星岑車業</title>
+<title>Paul Garage</title>
 
 <style>
-/* 基本設定 */
-body {
-    margin: 0;
-    padding: 0;
-    background: #000;
-    font-family: Arial, sans-serif;
+body{
+    margin:0;
+    font-family:"Microsoft JhengHei", sans-serif;
+    background:#f4f4f4;
 }
 
-/* HERO 主視覺區 */
-.hero {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* 🔵 Header */
+header{
+    background:#0f0f0f;
+    color:#fff;
+    padding:18px;
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
 }
 
-/* 背景圖片（重點修正） */
-.hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* ✅ 不裁切關鍵 */
-    background: black;
+/* 🔵 HERO（已修正：不裁切版本） */
+.hero{
+    position:relative;
+    height:320px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    text-align:center;
 }
 
-/* 漸層遮罩 */
-.hero::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
+/* 背景圖片改成 img 控制（避免 cover 裁切問題） */
+.hero img{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:cover; /* 電腦好看 */
+    z-index:0;
+}
+
+/* 遮罩 */
+.hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
         to bottom,
-        rgba(0,0,0,0.2),
-        rgba(0,0,0,0.6)
+        rgba(0,0,0,0.35),
+        rgba(0,0,0,0.75)
     );
-    pointer-events: none;
+    z-index:1;
 }
 
-/* 文字區（如果你之後要放標題） */
-.hero-text {
-    position: absolute;
-    color: white;
-    text-align: center;
-    z-index: 2;
+.hero-content{
+    position:relative;
+    z-index:2;
+    padding:10px;
 }
 
-/* 手機優化 */
-@media (max-width: 768px) {
-    .hero {
-        height: 70vh;
+.hero h1{
+    font-size:26px;
+    margin-bottom:10px;
+}
+
+/* LINE按鈕 */
+.line-btn{
+    display:inline-block;
+    padding:10px 16px;
+    background:#00c300;
+    color:#fff;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* 🔵 區塊 */
+.section{
+    padding:25px 15px;
+    max-width:1100px;
+    margin:auto;
+}
+
+.title{
+    text-align:center;
+    font-size:22px;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+/* 🔵 車輛 */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+}
+
+.card{
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+    transition:0.2s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+}
+
+.card img{
+    width:100%;
+    height:170px;
+    object-fit:cover;
+}
+
+.card-body{
+    padding:12px;
+}
+
+.car-name{
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.price{
+    color:#e60000;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.desc{
+    font-size:13px;
+    color:#666;
+}
+
+.card a{
+    display:inline-block;
+    margin-top:10px;
+    background:#111;
+    color:#fff;
+    padding:8px 10px;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:13px;
+}
+
+/* 🔵 固定 LINE */
+.fixed-line{
+    position:fixed;
+    right:15px;
+    bottom:15px;
+    background:#00c300;
+    color:#fff;
+    padding:12px 14px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:bold;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* 🔵 手機優化 */
+@media(max-width:768px){
+    .hero{
+        height:260px;
     }
 
-    .hero img {
-        object-fit: contain;
+    .hero h1{
+        font-size:20px;
+    }
+
+    header{
+        font-size:16px;
     }
 }
 </style>
+
 </head>
 
 <body>
 
-<!-- HERO區塊 -->
+<header>
+Paul Garage｜嚴選好車・立即預約賞車・全台服務
+</header>
+
+<!-- HERO -->
 <div class="hero">
 
-    <!-- 🔥 你的圖片（請換成你自己的連結） -->
-    <img src="你的圖片連結或上傳後網址">
+    <!-- 🔥 你的背景圖 -->
+    <img src="520413253_122128191266841841_517358859357023635_n.jpg">
 
-    <!-- 文字（可刪） -->
-    <div class="hero-text">
-        <h1>星岑車業</h1>
-        <p>買車找力源</p>
+    <div class="hero-content">
+        <h1>優質外匯車 / 中古車專賣</h1>
+        <a class="line-btn" href="https://line.me/" target="_blank">
+            LINE 立即詢問
+        </a>
     </div>
-
 </div>
+
+<!-- 車輛區 -->
+<div class="section">
+    <div class="title">熱門車輛</div>
+
+    <div class="grid">
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e">
+            <div class="card-body">
+                <div class="car-name">BMW 320i M Sport</div>
+                <div class="price">89.8萬</div>
+                <div class="desc">跑車化套件 / 內裝乾淨</div>
+                <a href="#">查看車輛</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70">
+            <div class="card-body">
+                <div class="car-name">Mercedes-Benz C300</div>
+                <div class="price">129.8萬</div>
+                <div class="desc">AMG外觀 / 氣氛燈 / ACC</div>
+                <a href="#">查看車輛</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1542362567-b07e54358753">
+            <div class="card-body">
+                <div class="car-name">Audi A4 40 TFSI</div>
+                <div class="price">109.8萬</div>
+                <div class="desc">科技內裝 / 省油好開</div>
+                <a href="#">查看車輛</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- LINE -->
+<a class="fixed-line" href="https://line.me/" target="_blank">
+LINE
+</a>
 
 </body>
 </html>
