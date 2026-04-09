@@ -22,63 +22,44 @@ header{
     font-weight:bold;
 }
 
-/* 🔵 HERO（關鍵修正區） */
+/* 🔵 HERO（乾淨版：不裁切 + 無模糊） */
 .hero{
     position:relative;
     height:320px;
+    background:#000; /* ✔ 補底色 */
+    display:flex;
+    align-items:center;
+    justify-content:center;
     overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
     text-align:center;
-    color:#fff;
 }
 
-/* 🔥 背景模糊填滿層（避免空白） */
-.hero-bg{
-    position:absolute;
-    inset:0;
-    background:url("520413253_122128191266841841_517358859357023635_n.jpg") center/cover no-repeat;
-    filter:blur(10px);
-    transform:scale(1.1);
-    z-index:0;
-}
-
-/* 🔥 主圖（完整顯示不裁切） */
-.hero-img{
-    position:relative;
-    z-index:1;
-    height:100%;
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.hero-img img{
+/* 圖片完整顯示（核心） */
+.hero img{
     max-width:100%;
     max-height:100%;
-    object-fit:contain; /* ✔ 核心：完全不裁切 */
+    object-fit:contain; /* ✔ 不裁切關鍵 */
+    display:block;
 }
 
-/* 🔥 漸層 */
+/* 遮罩（保留質感但不影響圖片） */
 .hero::after{
     content:"";
     position:absolute;
     inset:0;
     background:linear-gradient(
         to bottom,
-        rgba(0,0,0,0.35),
-        rgba(0,0,0,0.75)
+        rgba(0,0,0,0.25),
+        rgba(0,0,0,0.65)
     );
-    z-index:2;
+    pointer-events:none;
 }
 
 /* 文字 */
 .hero-content{
     position:absolute;
-    z-index:3;
-    text-align:center;
+    z-index:2;
+    color:#fff;
 }
 
 .hero h1{
@@ -198,13 +179,8 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
 <!-- HERO -->
 <div class="hero">
 
-    <!-- 模糊背景 -->
-    <div class="hero-bg"></div>
-
-    <!-- 主圖（不裁切） -->
-    <div class="hero-img">
-        <img src="520413253_122128191266841841_517358859357023635_n.jpg">
-    </div>
+    <!-- 你的圖片（不裁切） -->
+    <img src="520413253_122128191266841841_517358859357023635_n.jpg">
 
     <div class="hero-content">
         <h1>優質外匯車 / 中古車專賣</h1>
