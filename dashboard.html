@@ -63,6 +63,7 @@ button{
   <input id="name" placeholder="車名">
   <input id="price" placeholder="價格">
   <input id="img" placeholder="圖片URL">
+  <input id="desc" placeholder="配備 / 說明">
 
   <button onclick="addCar()">上架車輛</button>
   <button onclick="logout()">登出</button>
@@ -88,13 +89,13 @@ import {
   addDoc,
   onSnapshot,
   deleteDoc,
-  doc
+  doc,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBMRylaUJ3dI7KeA7vKN0FWPADnElPgIbY",
   authDomain: "paul-garage.firebaseapp.com",
-  databaseURL: "https://paul-garage-default-rtdb.firebaseio.com",
   projectId: "paul-garage"
 };
 
@@ -102,7 +103,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔐 沒登入踢回登入頁
+// 🔐 沒登入 → 踢回登入頁
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = "admin.html";
@@ -116,23 +117,37 @@ window.logout = function () {
   });
 };
 
-// 🚗 上架
+// 🚗 上架車輛
 window.addCar = async function () {
 
   const name = document.getElementById("name").value;
   const price = document.getElementById("price").value;
   const img = document.getElementById("img").value;
+  const desc = document.getElementById("desc").value;
+
+  if(!name || !price || !img){
+    alert("請填寫完整資料");
+    return;
+  }
 
   await addDoc(collection(db, "cars"), {
     name,
     price,
-    img
+    img,
+    desc,
+    active: true // ⭐ 預設上架
   });
 
   alert("上架成功");
+
+  // 清空欄位
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("img").value = "";
+  document.getElementById("desc").value = "";
 };
 
-// 📦 即時讀取
+// 📦 即時顯示車輛
 const list = document.getElementById("list");
 
 onSnapshot(collection(db, "cars"), (snap) => {
@@ -147,16 +162,32 @@ onSnapshot(collection(db, "cars"), (snap) => {
         <img src="${c.img}" width="100"><br>
         <b>${c.name}</b><br>
         ${c.price}<br>
-        <button onclick="delCar('${d.id}')">下架</button>
+        ${c.desc || ""}<br>
+
+        <button onclick="toggleCar('${d.id}', ${c.active})">
+          ${c.active ? "下架" : "上架"}
+        </button>
+
+        <button onclick="delCar('${d.id}')">刪除</button>
       </div>
     `;
   });
 
 });
 
-// ❌ 下架
+// 🔄 上下架
+window.toggleCar = async function(id, status){
+  await updateDoc(doc(db, "cars", id), {
+    active: !status
+  });
+};
+
+// ❌ 刪除
 window.delCar = async function (id) {
-  await deleteDoc(doc(db, "cars", id));
+
+  if(confirm("確定要刪除嗎？")){
+    await deleteDoc(doc(db, "cars", id));
+  }
 };
 
 </script>
