@@ -2,215 +2,105 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Paul Garage</title>
+<title>後台</title>
 
 <style>
-body{
-    margin:0;
-    font-family:"Microsoft JhengHei", sans-serif;
-    background:#f4f4f4;
-}
-
-header{
-    background:#0f0f0f;
-    color:#fff;
-    padding:18px;
-    text-align:center;
-    font-size:22px;
-    font-weight:bold;
-}
-
-.hero{
-    background:#000;
-    position:relative;
-    height:520px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
-
-.hero::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
-    background-repeat:no-repeat;
-    background-position:center;
-    background-size:contain;
-    transform:scale(1.05);
-}
-
-.hero::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to bottom,rgba(0,0,0,0.2),rgba(0,0,0,0.75));
-}
-
-.hero-content{
-    position:relative;
-    z-index:2;
-    color:#fff;
-    text-align:center;
-}
-
-.hero h1{
-    font-size:32px;
-}
-
-.line-btn{
-    display:inline-block;
-    padding:10px 16px;
-    background:#00c300;
-    color:#fff;
-    border-radius:8px;
-    text-decoration:none;
-}
-
-.section{
-    padding:25px 15px;
-    max-width:1100px;
-    margin:auto;
-}
-
-.title{
-    text-align:center;
-    font-size:22px;
-    margin-bottom:20px;
-    font-weight:bold;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-    gap:18px;
-}
-
-.card{
-    background:#fff;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 3px 10px rgba(0,0,0,0.1);
-}
-
-.card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-}
-
-.card-body{
-    padding:12px;
-}
-
-.car-name{font-weight:bold;}
-.price{color:red;font-weight:bold;}
-.desc{font-size:13px;color:#666;}
-
-.card a{
-    display:inline-block;
-    margin-top:10px;
-    background:#111;
-    color:#fff;
-    padding:8px 10px;
-    border-radius:6px;
-    text-decoration:none;
-}
-
-.fixed-line{
-    position:fixed;
-    right:15px;
-    bottom:15px;
-    background:#00c300;
-    color:#fff;
-    padding:12px 14px;
-    border-radius:50px;
-    text-decoration:none;
-}
-
-.admin-btn{
-    position:fixed;
-    top:15px;
-    right:15px;
-    background:#111;
-    color:#fff;
-    padding:10px 16px;
-    border-radius:8px;
-    text-decoration:none;
-}
+body{font-family:Arial;background:#111;color:#fff;margin:0;}
+.container{width:90%;max-width:500px;margin:20px auto;background:#222;padding:20px;border-radius:10px;}
+input{width:100%;padding:10px;margin:6px 0;}
+button{width:100%;padding:10px;margin-top:6px;}
+.car{background:#333;padding:10px;margin-top:10px;border-radius:8px;}
+img{width:100%;}
 </style>
 </head>
 
 <body>
 
-<header>Paul Garage｜嚴選好車</header>
+<div class="container">
+<h2>新增車輛</h2>
 
-<a href="admin.html" class="admin-btn">登入</a>
+<input id="name" placeholder="車名">
+<input id="price" placeholder="價格">
+<input id="img" placeholder="圖片網址">
+<input id="desc" placeholder="描述">
 
-<div class="hero">
-  <div class="hero-content">
-    <h1>優質外匯車 / 中古車</h1>
-    <a class="line-btn" href="https://line.me/ti/p/~k9527">LINE 立即詢問</a>
-  </div>
+<button onclick="addCar()">上架</button>
 </div>
 
-<div class="section">
-  <div class="title">熱門車輛</div>
-  <div class="grid" id="cars"></div>
+<div class="container">
+<h2>車輛列表</h2>
+<div id="list"></div>
 </div>
-
-<a class="fixed-line" href="https://line.me/ti/p/~k9527">LINE</a>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+getFirestore,collection,addDoc,getDocs,deleteDoc,doc,updateDoc,onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBMRylaUJ3dI7KeA7vKN0FWPADnElPgIbY",
-  authDomain: "paul-garage.firebaseapp.com",
-  projectId: "paul-garage"
+const firebaseConfig={
+apiKey:"AIzaSyBMRylaUJ3dI7KeA7vKN0FWPADnElPgIbY",
+authDomain:"paul-garage.firebaseapp.com",
+projectId:"paul-garage"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
 
-async function loadCars(){
+// ✔ 上架（重點：addDoc）
+window.addCar=async function(){
 
-  const snap = await getDocs(collection(db,"cars"));
+await addDoc(collection(db,"cars"),{
+name:name.value,
+price:price.value,
+img:img.value,
+desc:desc.value,
+active:true
+});
 
-  let html="";
+alert("上架成功");
+};
 
-  snap.forEach(d=>{
-    const c=d.data();
+// ✔ 即時列表
+onSnapshot(collection(db,"cars"),(snap)=>{
 
-    if(c.active===false) return;
+let html="";
 
-    html+=`
-      <div class="card">
-        <img src="${c.img}">
-        <div class="card-body">
-          <div class="car-name">${c.name}</div>
-          <div class="price">${c.price}</div>
-          <div class="desc">${c.desc||""}</div>
+snap.forEach(d=>{
+const c=d.data();
 
-          <a target="_blank" href="https://line.me/ti/p/~k9527">
-            LINE詢問
-          </a>
+html+=`
+<div class="car">
+<img src="${c.img}">
+<b>${c.name}</b><br>
+${c.price}<br>
+${c.desc||""}<br>
 
-        </div>
-      </div>
-    `;
-  });
+<button onclick="del('${d.id}')">刪除</button>
 
-  document.getElementById("cars").innerHTML=html;
-}
+<button onclick="toggle('${d.id}',${c.active})">
+${c.active?"下架":"上架"}
+</button>
 
-loadCars();
+</div>
+`;
+});
+
+list.innerHTML=html;
+});
+
+// ✔ 刪除
+window.del=async function(id){
+await deleteDoc(doc(db,"cars",id));
+};
+
+// ✔ 上下架
+window.toggle=async function(id,state){
+await updateDoc(doc(db,"cars",id),{
+active:!state
+});
+};
 
 </script>
 
