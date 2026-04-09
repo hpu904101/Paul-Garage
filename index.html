@@ -23,12 +23,12 @@ header{
     font-weight:bold;
 }
 
-/* 🔥 HERO（已微調大小） */
+/* 🔥 HERO（電腦版完整不裁切 + 變小） */
 .hero{
-    background:url("520413253_122128191266841841_517358859357023635_n.jpg") center/cover no-repeat;
+    background:url("520413253_122128191266841841_517358859357023635_n.jpg") center/contain no-repeat;
 
-    /* 💻 電腦版：稍微縮小 */
-    height:420px;
+    /* 💻 電腦版：縮小重點 */
+    height:360px;
 
     display:flex;
     align-items:center;
@@ -59,7 +59,7 @@ header{
 }
 
 .hero h1{
-    font-size:30px;
+    font-size:28px;
     margin-bottom:10px;
 }
 
@@ -156,6 +156,7 @@ header{
 @media (max-width:768px){
     .hero{
         height:280px;
+        background-size:cover;
         background-position:center;
     }
 
