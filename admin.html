@@ -2,66 +2,75 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>車商後台登入</title>
+<title>登入</title>
 
 <style>
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial;
-  background: #111;
-  color: white;
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#111;
+  color:white;
+  font-family:Arial;
 }
 
-.login-box {
-  text-align: center;
-  background: #1c1c1c;
-  padding: 40px;
-  border-radius: 12px;
-  width: 300px;
+.box{
+  text-align:center;
+  background:#1c1c1c;
+  padding:40px;
+  border-radius:10px;
+  width:300px;
 }
 
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  cursor: pointer;
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
 }
 </style>
 </head>
 
 <body>
 
-<div class="login-box">
-  <h2>車商後台登入</h2>
+<div class="box">
+  <h2>後台登入</h2>
 
   <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="密碼">
+  <input id="password" type="password" placeholder="Password">
 
   <button onclick="login()">登入</button>
+
+  <p id="msg"></p>
 </div>
 
 <script type="module">
 import { auth } from "./firebase.js";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-window.login = async function () {
+window.login = async () => {
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const msg = document.getElementById("msg");
+
+  msg.innerText = "登入中...";
 
   try {
-    await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "dashboard.html";
-  } catch (err) {
-    alert("登入失敗：" + err.message);
+    const user = await signInWithEmailAndPassword(auth, email, password);
+
+    console.log("登入成功", user);
+
+    msg.innerText = "登入成功，跳轉中...";
+
+    setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 800);
+
+  } catch (error) {
+    console.error(error);
+    msg.innerText = "登入失敗：" + error.message;
   }
 };
 </script>
