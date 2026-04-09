@@ -22,30 +22,29 @@ header{
   font-weight:bold;
 }
 
-/* 🔥 HERO（不裁圖版本） */
+/* 🔥 HERO（加大強化版） */
 .hero{
   width:100%;
-  height:320px;
+  height:460px; /* 🔥 更大（關鍵） */
 
   background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
 
-  /* ✅ 重點：不裁圖 */
-  background-size:contain;
+  background-size:cover;
   background-repeat:no-repeat;
-  background-position:center;
 
-  /* 🔥 補底色（避免空白不好看） */
-  background-color:#000;
+  /* 🔥 視覺重點往車頭 */
+  background-position:center 25%;
 
   display:flex;
   align-items:center;
   justify-content:center;
+
   color:#fff;
   text-align:center;
   position:relative;
 }
 
-/* 🔥 漸層（保留但不影響圖片） */
+/* 🔥 漸層 */
 .hero::after{
   content:"";
   position:absolute;
@@ -56,7 +55,7 @@ header{
   background:linear-gradient(
     to bottom,
     rgba(0,0,0,0.25),
-    rgba(0,0,0,0.6)
+    rgba(0,0,0,0.75)
   );
 }
 
@@ -66,20 +65,21 @@ header{
 }
 
 .hero h1{
-  font-size:28px;
-  margin-bottom:10px;
+  font-size:32px; /* 🔥 放大字 */
+  margin-bottom:12px;
 }
 
 /* 🔥 LINE按鈕 */
 .line-btn{
   display:inline-block;
-  padding:10px 18px;
+  padding:12px 20px;
   background:#00c300;
   color:#fff;
-  border-radius:10px;
+  border-radius:12px;
   text-decoration:none;
   font-weight:bold;
-  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  box-shadow:0 4px 10px rgba(0,0,0,0.25);
+  font-size:16px;
 }
 
 /* 🔵 區塊 */
@@ -159,7 +159,7 @@ header{
   bottom:15px;
   background:#00c300;
   color:#fff;
-  padding:14px 16px;
+  padding:16px 18px;
   border-radius:50px;
   text-decoration:none;
   font-weight:bold;
@@ -169,7 +169,12 @@ header{
 /* 📱 手機優化 */
 @media (max-width:768px){
   .hero{
-    height:240px;
+    height:360px; /* 🔥 手機也加大 */
+    background-position:center top;
+  }
+
+  .hero h1{
+    font-size:24px;
   }
 }
 </style>
