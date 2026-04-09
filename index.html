@@ -39,7 +39,10 @@ header{
     background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
     background-repeat:no-repeat;
     background-position:center;
-    background-size:contain;
+
+    /* 🔥已修正：手機也會變大 */
+    background-size:cover;
+
     transform:scale(1.05);
 }
 
@@ -140,6 +143,22 @@ header{
     padding:10px 16px;
     border-radius:8px;
     text-decoration:none;
+}
+
+/* 📱手機優化 */
+@media (max-width:768px){
+    .hero{
+        height:420px;
+    }
+
+    .hero::before{
+        background-size:cover;
+        transform:scale(1.15);
+    }
+
+    .hero h1{
+        font-size:24px;
+    }
 }
 </style>
 </head>
