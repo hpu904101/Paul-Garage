@@ -2,119 +2,83 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>車輛後台管理</title>
+<title>車商後台</title>
 </head>
-
 <body>
 
-<h2>車輛後台登入</h2>
+<h2>車輛上架系統</h2>
 
-<input id="email" placeholder="帳號">
-<input id="password" type="password" placeholder="密碼">
-<button onclick="login()">登入</button>
+<input id="carName" placeholder="車名">
+<br><br>
+<input id="price" placeholder="價格">
+<br><br>
+<input id="image" placeholder="圖片網址">
+<br><br>
 
-<hr>
+<button onclick="addCar()">上架車輛</button>
 
-<div id="panel" style="display:none">
-
-<h2>上架車輛</h2>
-
-<input id="name" placeholder="車名"><br>
-<input id="price" placeholder="價格"><br>
-<input id="img" placeholder="圖片網址"><br>
-
-<button onclick="addCar()">上架</button>
-
-<hr>
-
-<h2>車輛列表</h2>
+<h3>車輛列表</h3>
 <div id="list"></div>
 
-</div>
-
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-getAuth,
-signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-deleteDoc,
-doc
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyBCaOaKY7XDFK2YAqmVfluDG1qazh8b-1E",
-authDomain: "car-site-ee549.firebaseapp.com",
-projectId: "car-site-ee549",
-storageBucket: "car-site-ee549.appspot.com",
-appId: "1:840060743662:web:1d2c61b95095d7298928ff"
+  apiKey: "你的APIKEY",
+  authDomain: "你的authDomain",
+  projectId: "你的projectId"
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔐 登入
-window.login = async function(){
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
+// 上架車輛
+window.addCar = async function () {
+  await addDoc(collection(db, "cars"), {
+    name: carName.value,
+    price: price.value,
+    image: image.value
+  });
 
-await signInWithEmailAndPassword(auth, email, password);
+  alert("上架成功");
+  loadCars();
+};
 
-alert("登入成功");
-document.getElementById("panel").style.display = "block";
+// 讀取車輛
+async function loadCars() {
+  const querySnapshot = await getDocs(collection(db, "cars"));
+  let html = "";
+
+  querySnapshot.forEach((docItem) => {
+    html += `
+      <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h4>${docItem.data().name}</h4>
+        <p>${docItem.data().price}</p>
+        <img src="${docItem.data().image}" width="150">
+        <br>
+        <button onclick="deleteCar('${docItem.id}')">下架</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("list").innerHTML = html;
+}
+
+// 下架
+window.deleteCar = async function (id) {
+  await deleteDoc(doc(db, "cars", id));
+  loadCars();
+};
 
 loadCars();
-}
-
-// 🚗 上架車子
-window.addCar = async function(){
-await addDoc(collection(db,"cars"),{
-name: document.getElementById("name").value,
-price: document.getElementById("price").value,
-img: document.getElementById("img").value
-});
-
-alert("上架成功");
-loadCars();
-}
-
-// 📦 讀取車子
-async function loadCars(){
-
-const snap = await getDocs(collection(db,"cars"));
-
-let html = "";
-
-snap.forEach(d=>{
-const c = d.data();
-
-html += `
-<div style="border:1px solid #ccc; margin:10px; padding:10px">
-<img src="${c.img}" width="150"><br>
-${c.name} - ${c.price}
-<br>
-<button onclick="delCar('${d.id}')">下架</button>
-</div>
-`;
-});
-
-document.getElementById("list").innerHTML = html;
-}
-
-// ❌ 下架
-window.delCar = async function(id){
-await deleteDoc(doc(db,"cars",id));
-loadCars();
-}
-
 </script>
 
 </body>
