@@ -92,14 +92,14 @@ header{
     font-weight:bold;
 }
 
-/* GRID（整合新版） */
+/* GRID */
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
     gap:18px;
 }
 
-/* CARD（用新版乾淨風格） */
+/* CARD */
 .card{
     background:#fff;
     border-radius:12px;
@@ -198,7 +198,9 @@ Paul Garage｜嚴選好車・立即預約賞車
 <div class="hero">
     <div class="hero-content">
         <h1>優質外匯車 / 中古車專賣</h1>
-        <a class="line-btn" href="https://line.me/" target="_blank">LINE 立即詢問</a>
+        <a class="line-btn" href="https://line.me/R/ti/p/@k9527" target="_blank">
+            LINE 立即詢問
+        </a>
     </div>
 </div>
 
@@ -209,7 +211,7 @@ Paul Garage｜嚴選好車・立即預約賞車
 </div>
 
 <!-- LINE -->
-<a class="fixed-line" href="https://line.me/" target="_blank">LINE</a>
+<a class="fixed-line" href="https://line.me/R/ti/p/@k9527" target="_blank">LINE</a>
 
 <script type="module">
 
@@ -236,20 +238,23 @@ async function loadCars(){
   snap.forEach(d=>{
     const c = d.data();
 
-    // ❗只顯示上架
     if(c.active === false) return;
 
     html += `
       <div class="card">
         <img src="${c.img}">
         <div class="card-body">
-          <div class="car-name">${c.name}</div>
-          <div class="price">${c.price}</div>
-          <div class="desc">${c.desc || ""}</div>
+            <div class="car-name">${c.name}</div>
+            <div class="price">${c.price}</div>
+            <div class="desc">${c.desc || ""}</div>
 
-          <a href="https://line.me/?text=我想詢問：${c.name}" target="_blank">
-            LINE詢問
-          </a>
+            <!-- 🔥 LINE 自動帶資料 -->
+            <a target="_blank"
+            href="https://line.me/R/oaMessage/@k9527/?%E6%88%91%E6%83%B3%E8%A9%A2%E5%95%8F%EF%BC%9A${encodeURIComponent(c.name)}%0A%E5%83%B9%E6%A0%BC%EF%BC%9A${encodeURIComponent(c.price)}%0A%E8%AA%AA%E6%98%8E%EF%BC%9A${encodeURIComponent(c.desc || '無')}"
+            >
+              LINE詢問
+            </a>
+
         </div>
       </div>
     `;
