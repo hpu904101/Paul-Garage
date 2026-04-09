@@ -124,11 +124,12 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs,
   deleteDoc,
   updateDoc,
   doc,
-  onSnapshot
+  onSnapshot,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -141,54 +142,78 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔐 登入檢查
+let editId = null;
+
+/* 🔐 登入檢查 */
 onAuthStateChanged(auth,(user)=>{
   if(!user){
-    window.location.href="admin.html";
+    window.location.href = "login.html";
   }
 });
 
-// 🚪 登出
-window.logout = function(){
-  signOut(auth).then(()=>{
-    window.location.href="admin.html";
-  });
+/* 🚪 登出 */
+window.logout = async function(){
+  await signOut(auth);
+  window.location.href = "login.html";
 };
 
-// 🚗 上架
+/* 🚗 上架車輛（🔥已修好） */
 window.addCar = async function(){
 
-  const name = nameInput.value;
-  const price = priceInput.value;
-  const img = imgInput.value;
-  const desc = descInput.value;
+  const name = document.getElementById("name").value;
+  const price = document.getElementById("price").value;
+  const img = document.getElementById("img").value;
+  const desc = document.getElementById("desc").value;
 
-  await addDoc(collection(db,"cars"),{
-    name,price,img,desc,
-    active:true
-  });
+  if(!name || !price){
+    alert("請輸入車名與價格");
+    return;
+  }
 
-  alert("上架成功");
+  try{
+    await addDoc(collection(db,"cars"),{
+      name,
+      price,
+      img,
+      desc,
+      active:true,
+      time:Date.now()
+    });
+
+    // 清空輸入
+    document.getElementById("name").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("img").value = "";
+    document.getElementById("desc").value = "";
+
+    alert("上架成功 🚗");
+
+  }catch(err){
+    alert("上架失敗：" + err.message);
+    console.log(err);
+  }
 };
 
-// 📦 即時列表
+/* 📦 即時列表 */
 const list = document.getElementById("list");
 
-onSnapshot(collection(db,"cars"),(snap)=>{
+const q = query(collection(db,"cars"),orderBy("time","desc"));
 
-  list.innerHTML="";
+onSnapshot(q,(snap)=>{
+
+  list.innerHTML = "";
 
   snap.forEach(d=>{
     const c = d.data();
 
     list.innerHTML += `
       <div class="car">
-        <img src="${c.img}">
+        <img src="${c.img || ''}">
         <b>${c.name}</b><br>
         ${c.price}<br>
-        ${c.desc||""}<br>
+        ${c.desc || ""}<br>
 
-        <button onclick="openEdit('${d.id}','${c.name}','${c.price}','${c.img}','${c.desc||""}')">
+        <button onclick="openEdit('${d.id}','${c.name}','${c.price}','${c.img}','${c.desc || ''}')">
           修改
         </button>
 
@@ -202,26 +227,26 @@ onSnapshot(collection(db,"cars"),(snap)=>{
   });
 });
 
-// 🔁 上下架
+/* 🔁 上下架 */
 window.toggle = async function(id,state){
   await updateDoc(doc(db,"cars",id),{
     active:!state
   });
 };
 
-// 🗑 刪除
+/* 🗑 刪除 */
 window.del = async function(id){
   if(confirm("確定刪除？")){
     await deleteDoc(doc(db,"cars",id));
   }
 };
 
-// ✏️ 開啟修改
+/* ✏️ 修改 */
 window.openEdit = function(id,name,price,img,desc){
 
-  window.editId = id;
+  editId = id;
 
-  document.getElementById("editBox").style.display="block";
+  document.getElementById("editBox").style.display = "block";
 
   eName.value = name;
   ePrice.value = price;
@@ -229,15 +254,15 @@ window.openEdit = function(id,name,price,img,desc){
   eDesc.value = desc;
 };
 
-// ❌ 關閉
+/* ❌ 關閉 */
 window.closeEdit = function(){
-  document.getElementById("editBox").style.display="none";
+  document.getElementById("editBox").style.display = "none";
 };
 
-// 💾 儲存修改
+/* 💾 儲存修改 */
 window.saveEdit = async function(){
 
-  await updateDoc(doc(db,"cars",window.editId),{
+  await updateDoc(doc(db,"cars",editId),{
     name:eName.value,
     price:ePrice.value,
     img:eImg.value,
