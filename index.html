@@ -22,16 +22,20 @@ header{
   font-weight:bold;
 }
 
-/* 🔥 HERO（已優化不亂裁） */
+/* 🔥 HERO（不裁圖版本） */
 .hero{
   width:100%;
   height:320px;
 
   background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
 
-  background-size:cover;
-  background-position:center 30%; /* 👈 重點：避免裁太多 */
+  /* ✅ 重點：不裁圖 */
+  background-size:contain;
   background-repeat:no-repeat;
+  background-position:center;
+
+  /* 🔥 補底色（避免空白不好看） */
+  background-color:#000;
 
   display:flex;
   align-items:center;
@@ -41,7 +45,7 @@ header{
   position:relative;
 }
 
-/* 🔥 漸層 */
+/* 🔥 漸層（保留但不影響圖片） */
 .hero::after{
   content:"";
   position:absolute;
@@ -51,8 +55,8 @@ header{
   height:100%;
   background:linear-gradient(
     to bottom,
-    rgba(0,0,0,0.35),
-    rgba(0,0,0,0.75)
+    rgba(0,0,0,0.25),
+    rgba(0,0,0,0.6)
   );
 }
 
@@ -162,11 +166,10 @@ header{
   box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* 📱 手機優化（避免裁太多） */
+/* 📱 手機優化 */
 @media (max-width:768px){
   .hero{
     height:240px;
-    background-position:center top;
   }
 }
 </style>
