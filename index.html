@@ -3,145 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>星岑車業｜買車找力源</title>
+<title>Paul Garage</title>
 
 <style>
 
-/* ========== 全站基本設定 ========== */
 body{
   margin:0;
-  font-family:"Noto Sans TC", sans-serif;
-  background:#f5f5f5;
-  color:#333;
+  font-family:"Microsoft JhengHei", sans-serif;
+  background:#f4f4f4;
 }
 
-/* ========== HERO 區塊 ========== */
+/* 🔵 Header */
+header{
+  background:#0f0f0f;
+  color:#fff;
+  padding:16px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+}
+
+/* 🔵 HERO */
 .hero{
-  width:100%;
+  background:url("520413253_122128191266841841_517358859357023635_n.jpg") center/cover no-repeat;
   height:340px;
-
-  background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
-
-  /* 💻 電腦版 */
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
 
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
 
+  color:#fff;
   position:relative;
   overflow:hidden;
 }
 
 /* 遮罩 */
-.hero::before{
+.hero::after{
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,0.18);
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0.75)
+  );
 }
 
-/* HERO 文字 */
-.hero .content{
+.hero-content{
   position:relative;
-  z-index:2;
-  color:white;
-  text-shadow:0 2px 12px rgba(0,0,0,0.75);
+  z-index:1;
+  padding:0 15px;
 }
 
 .hero h1{
-  font-size:32px;
-  margin:0;
+  font-size:26px;
+  margin-bottom:12px;
 }
 
-.hero p{
-  margin:8px 0 0;
-  font-size:18px;
+.line-btn{
+  display:inline-block;
+  padding:10px 16px;
+  background:#00c300;
+  color:#fff;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:bold;
 }
 
-/* ========== 手機優化 ========== */
+/* 📱 手機優化（關鍵修正） */
 @media (max-width:768px){
   .hero{
-    height:300px;
+    height:280px;
 
-    /* 🔥 手機優化：避免裁切太嚴重 */
-    background-position:center 25%;
-    background-size:cover;
+    /* 🔥 修正手機裁切太多 */
+    background-position:center 20%;
   }
 
   .hero h1{
-    font-size:24px;
-  }
-
-  .hero p{
-    font-size:14px;
+    font-size:20px;
   }
 }
 
-/* ========== 內容區塊 ========== */
-.container{
+/* 🔵 區塊 */
+.section{
+  padding:25px 15px;
   max-width:1100px;
-  margin:40px auto;
-  padding:0 16px;
+  margin:auto;
+}
+
+.title{
+  text-align:center;
+  font-size:22px;
+  margin-bottom:20px;
+  font-weight:bold;
+}
+
+/* 🔵 車輛 */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px;
 }
 
 .card{
   background:#fff;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
-  margin-bottom:20px;
-}
-
-.card h2{
-  margin-top:0;
-}
-
-.btn{
-  display:inline-block;
-  padding:10px 16px;
-  background:#111;
-  color:#fff;
-  border-radius:8px;
-  text-decoration:none;
-}
-
-/* ========== 車輛列表（基本版） ========== */
-.car-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:16px;
-}
-
-.car{
-  background:#fff;
   border-radius:12px;
   overflow:hidden;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
-.car img{
+.card img{
   width:100%;
-  height:160px;
+  height:170px;
   object-fit:cover;
 }
 
-.car .info{
+.card-body{
   padding:12px;
 }
 
-.car .info h3{
-  margin:0;
-  font-size:16px;
+.car-name{
+  font-weight:bold;
+  margin-bottom:6px;
 }
 
-.car .info p{
-  margin:6px 0 0;
-  font-size:14px;
+.price{
+  color:#e60000;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+.desc{
+  font-size:13px;
   color:#666;
+}
+
+.card a{
+  display:inline-block;
+  margin-top:10px;
+  background:#111;
+  color:#fff;
+  padding:8px 10px;
+  border-radius:6px;
+  text-decoration:none;
+  font-size:13px;
+}
+
+/* 🔵 LINE固定按鈕 */
+.fixed-line{
+  position:fixed;
+  right:15px;
+  bottom:15px;
+  background:#00c300;
+  color:#fff;
+  padding:12px 14px;
+  border-radius:50px;
+  text-decoration:none;
+  font-weight:bold;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  z-index:999;
 }
 
 </style>
@@ -149,56 +170,59 @@ body{
 
 <body>
 
+<header>
+  Paul Garage｜嚴選好車・立即預約賞車・全台服務
+</header>
+
 <!-- HERO -->
 <div class="hero">
-  <div class="content">
-    <h1>星岑車業</h1>
-    <p>買車找力源｜嚴選優質中古車</p>
+  <div class="hero-content">
+    <h1>優質外匯車 / 中古車專賣</h1>
+    <a class="line-btn" href="https://line.me/" target="_blank">LINE 立即詢問</a>
   </div>
 </div>
 
-<!-- 主內容 -->
-<div class="container">
+<!-- 車輛區 -->
+<div class="section">
+  <div class="title">熱門車輛</div>
 
-  <div class="card">
-    <h2>關於我們</h2>
-    <p>專營優質中古車買賣，嚴選車況透明、品質保證，協助客戶找到最適合的車。</p>
-    <a class="btn" href="#">聯絡我們</a>
-  </div>
+  <div class="grid">
 
-  <div class="card">
-    <h2>熱門車款</h2>
-
-    <div class="car-grid">
-
-      <div class="car">
-        <img src="car1.jpg">
-        <div class="info">
-          <h3>BMW X6 xDrive40i</h3>
-          <p>低里程｜M Sport</p>
-        </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e">
+      <div class="card-body">
+        <div class="car-name">BMW 320i M Sport</div>
+        <div class="price">89.8萬</div>
+        <div class="desc">跑車化套件 / 內裝乾淨</div>
+        <a href="#">查看車輛</a>
       </div>
-
-      <div class="car">
-        <img src="car2.jpg">
-        <div class="info">
-          <h3>Mercedes-Benz C300</h3>
-          <p>AMG套件｜質感內裝</p>
-        </div>
-      </div>
-
-      <div class="car">
-        <img src="car3.jpg">
-        <div class="info">
-          <h3>Toyota Corolla Cross</h3>
-          <p>省油｜家庭首選</p>
-        </div>
-      </div>
-
     </div>
-  </div>
 
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70">
+      <div class="card-body">
+        <div class="car-name">Mercedes-Benz C300</div>
+        <div class="price">129.8萬</div>
+        <div class="desc">AMG外觀 / 氣氛燈 / ACC</div>
+        <a href="#">查看車輛</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1542362567-b07e54358753">
+      <div class="card-body">
+        <div class="car-name">Audi A4 40 TFSI</div>
+        <div class="price">109.8萬</div>
+        <div class="desc">科技內裝 / 省油好開</div>
+        <a href="#">查看車輛</a>
+      </div>
+    </div>
+
+  </div>
 </div>
+
+<!-- LINE -->
+<a class="fixed-line" href="https://line.me/" target="_blank">LINE</a>
 
 </body>
 </html>
