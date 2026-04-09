@@ -22,11 +22,11 @@ header{
     font-weight:bold;
 }
 
-/* 🔵 HERO（乾淨版：不裁切 + 無模糊） */
+/* 🔥 HERO（放大版） */
 .hero{
     position:relative;
-    height:320px;
-    background:#000; /* ✔ 補底色 */
+    height:520px; /* ✔ 重點：放大 */
+    background:#000;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -34,23 +34,22 @@ header{
     text-align:center;
 }
 
-/* 圖片完整顯示（核心） */
+/* 圖片完整顯示 */
 .hero img{
     max-width:100%;
     max-height:100%;
-    object-fit:contain; /* ✔ 不裁切關鍵 */
-    display:block;
+    object-fit:contain;
 }
 
-/* 遮罩（保留質感但不影響圖片） */
+/* 漸層 */
 .hero::after{
     content:"";
     position:absolute;
     inset:0;
     background:linear-gradient(
         to bottom,
-        rgba(0,0,0,0.25),
-        rgba(0,0,0,0.65)
+        rgba(0,0,0,0.20),
+        rgba(0,0,0,0.70)
     );
     pointer-events:none;
 }
@@ -63,14 +62,14 @@ header{
 }
 
 .hero h1{
-    font-size:26px;
+    font-size:32px;
     margin-bottom:10px;
 }
 
 /* LINE按鈕 */
 .line-btn{
     display:inline-block;
-    padding:10px 16px;
+    padding:12px 18px;
     background:#00c300;
     color:#fff;
     border-radius:8px;
@@ -160,11 +159,11 @@ header{
 /* 手機 */
 @media(max-width:768px){
     .hero{
-        height:260px;
+        height:380px; /* 手機放大 */
     }
 
     .hero h1{
-        font-size:20px;
+        font-size:22px;
     }
 }
 </style>
@@ -179,7 +178,6 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
 <!-- HERO -->
 <div class="hero">
 
-    <!-- 你的圖片（不裁切） -->
     <img src="520413253_122128191266841841_517358859357023635_n.jpg">
 
     <div class="hero-content">
