@@ -2,39 +2,49 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>車商後台</title>
+<title>車商後台登入</title>
 </head>
 <body>
 
-<h2>車輛上架系統</h2>
+<h2>車商後台登入</h2>
 
-<input id="carName" placeholder="車名">
+<input id="email" placeholder="帳號">
 <br><br>
-<input id="price" placeholder="價格">
+<input id="password" type="password" placeholder="密碼">
 <br><br>
-<input id="image" placeholder="圖片網址">
-<br><br>
-
-<button onclick="addCar()">上架車輛</button>
-
-<h3>車輛列表</h3>
-<div id="list"></div>
+<button onclick="login()">登入後台</button>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "你的APIKEY",
   authDomain: "你的authDomain",
   projectId: "你的projectId"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.login = function () {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      alert("登入成功");
+      window.location.href = "dashboard.html";
+    })
+    .catch(() => {
+      alert("登入失敗");
+    });
+};
+</script>
+
+</body>
+</html>  projectId: "你的projectId"
 };
 
 const app = initializeApp(firebaseConfig);
