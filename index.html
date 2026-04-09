@@ -13,7 +13,7 @@ body{
     background:#f4f4f4;
 }
 
-/* 🔵 Header */
+/* Header */
 header{
     background:#0f0f0f;
     color:#fff;
@@ -23,50 +23,35 @@ header{
     font-weight:bold;
 }
 
-/* 🔥 HERO（重點修正版） */
+/* HERO */
 .hero{
     background:#000;
     position:relative;
-
-    /* 💻 電腦版：讓圖片「變大但完整顯示」 */
     height:520px;
-
     display:flex;
     align-items:center;
     justify-content:center;
     overflow:hidden;
 }
 
-/* 背景圖片層 */
 .hero::before{
     content:"";
     position:absolute;
     inset:0;
-
     background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
     background-repeat:no-repeat;
     background-position:center;
-
-    /* 🔥 重點：完整顯示 + 放大 */
     background-size:contain;
-
-    transform:scale(1.15); /* 👉 讓圖片「看起來變大」但不裁切 */
+    transform:scale(1.15);
 }
 
-/* 漸層 */
 .hero::after{
     content:"";
     position:absolute;
     inset:0;
-
-    background:linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.20),
-        rgba(0,0,0,0.70)
-    );
+    background:linear-gradient(to bottom,rgba(0,0,0,0.2),rgba(0,0,0,0.7));
 }
 
-/* 內容 */
 .hero-content{
     position:relative;
     z-index:2;
@@ -74,10 +59,7 @@ header{
     text-align:center;
 }
 
-.hero h1{
-    font-size:32px;
-    margin-bottom:10px;
-}
+.hero h1{font-size:32px;}
 
 .line-btn{
     display:inline-block;
@@ -89,7 +71,7 @@ header{
     font-weight:bold;
 }
 
-/* 🔵 區塊 */
+/* section */
 .section{
     padding:25px 15px;
     max-width:1100px;
@@ -103,7 +85,7 @@ header{
     font-weight:bold;
 }
 
-/* 🔵 車輛 */
+/* grid */
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -123,25 +105,11 @@ header{
     object-fit:cover;
 }
 
-.card-body{
-    padding:12px;
-}
+.card-body{padding:12px;}
 
-.car-name{
-    font-weight:bold;
-    margin-bottom:6px;
-}
-
-.price{
-    color:#e60000;
-    font-weight:bold;
-    margin-bottom:6px;
-}
-
-.desc{
-    font-size:13px;
-    color:#666;
-}
+.car-name{font-weight:bold;margin-bottom:6px;}
+.price{color:#e60000;font-weight:bold;margin-bottom:6px;}
+.desc{font-size:13px;color:#666;}
 
 .card a{
     display:inline-block;
@@ -154,7 +122,7 @@ header{
     font-size:13px;
 }
 
-/* 🔵 LINE固定按鈕 */
+/* LINE */
 .fixed-line{
     position:fixed;
     right:15px;
@@ -165,23 +133,6 @@ header{
     border-radius:50px;
     text-decoration:none;
     font-weight:bold;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
-
-/* 📱 手機版 */
-@media (max-width:768px){
-    .hero{
-        height:300px;
-    }
-
-    .hero::before{
-        background-size:cover;
-        transform:none;
-    }
-
-    .hero h1{
-        font-size:24px;
-    }
 }
 </style>
 </head>
@@ -200,47 +151,64 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
     </div>
 </div>
 
-<!-- 車輛區 -->
+<!-- 車輛 -->
 <div class="section">
     <div class="title">熱門車輛</div>
-
-    <div class="grid">
-
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e">
-            <div class="card-body">
-                <div class="car-name">BMW 320i M Sport</div>
-                <div class="price">89.8萬</div>
-                <div class="desc">跑車化套件 / 內裝乾淨</div>
-                <a href="#">查看車輛</a>
-            </div>
-        </div>
-
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70">
-            <div class="card-body">
-                <div class="car-name">Mercedes-Benz C300</div>
-                <div class="price">129.8萬</div>
-                <div class="desc">AMG外觀 / 氣氛燈 / ACC</div>
-                <a href="#">查看車輛</a>
-            </div>
-        </div>
-
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1542362567-b07e54358753">
-            <div class="card-body">
-                <div class="car-name">Audi A4 40 TFSI</div>
-                <div class="price">109.8萬</div>
-                <div class="desc">科技內裝 / 省油好開</div>
-                <a href="#">查看車輛</a>
-            </div>
-        </div>
-
-    </div>
+    <div class="grid" id="cars"></div>
 </div>
 
-<!-- LINE -->
 <a class="fixed-line" href="https://line.me/" target="_blank">LINE</a>
+
+<!-- Firebase -->
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+getFirestore,
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyBCaOaKY7XDFK2YAqmVfluDG1qazh8b-1E",
+authDomain: "car-site-ee549.firebaseapp.com",
+projectId: "car-site-ee549",
+storageBucket: "car-site-ee549.appspot.com",
+appId: "1:840060743662:web:1d2c61b95095d7298928ff"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 🚗 讀取車子
+async function loadCars(){
+
+const snap = await getDocs(collection(db,"cars"));
+
+let html = "";
+
+snap.forEach(d=>{
+const c = d.data();
+
+html += `
+<div class="card">
+    <img src="${c.img}">
+    <div class="card-body">
+        <div class="car-name">${c.name}</div>
+        <div class="price">${c.price}</div>
+        <div class="desc">${c.desc || ""}</div>
+        <a href="#">查看車輛</a>
+    </div>
+</div>
+`;
+});
+
+document.getElementById("cars").innerHTML = html;
+}
+
+loadCars();
+
+</script>
 
 </body>
 </html>
