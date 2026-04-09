@@ -23,12 +23,13 @@ header{
     font-weight:bold;
 }
 
-/* 🔵 HERO（已修正） */
+/* 🔥 HERO（已最佳化） */
 .hero{
-    /* 🔥 你的圖片 */
-    background:url("520413253_122128191266841841_517358859357023635_n.jpg") center/contain no-repeat;
+    background:url("520413253_122128191266841841_517358859357023635_n.jpg") center/cover no-repeat;
 
-    height:320px;
+    /* 💻 電腦版變大（重點） */
+    height:480px;
+
     display:flex;
     align-items:center;
     justify-content:center;
@@ -38,14 +39,11 @@ header{
     background-color:#000;
 }
 
-/* 漸層遮罩 */
+/* 漸層 */
 .hero::after{
     content:"";
     position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
+    inset:0;
 
     background:linear-gradient(
         to bottom,
@@ -61,7 +59,7 @@ header{
 }
 
 .hero h1{
-    font-size:28px;
+    font-size:32px;
     margin-bottom:10px;
 }
 
@@ -154,12 +152,15 @@ header{
     box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* 📱 手機微調 */
+/* 📱 手機版 */
 @media (max-width:768px){
     .hero{
         height:280px;
-        background-size:cover;
         background-position:center;
+    }
+
+    .hero h1{
+        font-size:24px;
     }
 }
 </style>
