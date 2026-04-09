@@ -42,7 +42,7 @@ header{
     background-repeat:no-repeat;
     background-position:center;
     background-size:contain;
-    transform:scale(1.15);
+    transform:scale(1.05);
 }
 
 .hero::after{
@@ -51,8 +51,8 @@ header{
     inset:0;
     background:linear-gradient(
         to bottom,
-        rgba(0,0,0,0.20),
-        rgba(0,0,0,0.70)
+        rgba(0,0,0,0.2),
+        rgba(0,0,0,0.75)
     );
 }
 
@@ -92,32 +92,53 @@ header{
     font-weight:bold;
 }
 
-/* grid */
+/* GRID（整合新版） */
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
     gap:18px;
 }
 
+/* CARD（用新版乾淨風格） */
 .card{
     background:#fff;
     border-radius:12px;
     overflow:hidden;
     box-shadow:0 3px 10px rgba(0,0,0,0.1);
+    transition:0.2s;
+}
+
+.card:hover{
+    transform:translateY(-3px);
 }
 
 .card img{
     width:100%;
-    height:170px;
+    height:180px;
     object-fit:cover;
 }
 
-.card-body{padding:12px;}
+.card-body{
+    padding:12px;
+}
 
-.car-name{font-weight:bold;margin-bottom:6px;}
-.price{color:#e60000;font-weight:bold;margin-bottom:6px;}
-.desc{font-size:13px;color:#666;}
+.car-name{
+    font-weight:bold;
+    margin-bottom:6px;
+}
 
+.price{
+    color:#e60000;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.desc{
+    font-size:13px;
+    color:#666;
+}
+
+/* LINE button */
 .card a{
     display:inline-block;
     margin-top:10px;
@@ -129,7 +150,7 @@ header{
     font-size:13px;
 }
 
-/* LINE */
+/* fixed LINE */
 .fixed-line{
     position:fixed;
     right:15px;
@@ -140,10 +161,9 @@ header{
     border-radius:50px;
     text-decoration:none;
     font-weight:bold;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* 後台登入按鈕 */
+/* admin */
 .admin-btn{
     position:fixed;
     top:15px;
@@ -154,16 +174,12 @@ header{
     border-radius:8px;
     text-decoration:none;
     font-weight:bold;
-    z-index:9999;
 }
 
-/* 手機 */
+/* mobile */
 @media (max-width:768px){
     .hero{height:300px;}
-    .hero::before{
-        background-size:cover;
-        transform:none;
-    }
+    .hero::before{background-size:cover;}
     .hero h1{font-size:24px;}
 }
 </style>
@@ -172,11 +188,11 @@ header{
 <body>
 
 <header>
-Paul Garage｜嚴選好車・立即預約賞車・全台服務
+Paul Garage｜嚴選好車・立即預約賞車
 </header>
 
-<!-- 後台登入 -->
-<a href="admin.html" class="admin-btn">後台登入</a>
+<!-- 後台 -->
+<a href="admin.html" class="admin-btn">登入</a>
 
 <!-- HERO -->
 <div class="hero">
@@ -186,7 +202,7 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
     </div>
 </div>
 
-<!-- 車輛區 -->
+<!-- 車輛 -->
 <div class="section">
     <div class="title">熱門車輛</div>
     <div class="grid" id="cars"></div>
@@ -195,15 +211,11 @@ Paul Garage｜嚴選好車・立即預約賞車・全台服務
 <!-- LINE -->
 <a class="fixed-line" href="https://line.me/" target="_blank">LINE</a>
 
-<!-- Firebase -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  getDocs 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBMRylaUJ3dI7KeA7vKN0FWPADnElPgIbY",
@@ -214,7 +226,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 🚗 讀取車輛
+// 🚗 載入車輛
 async function loadCars(){
 
   const snap = await getDocs(collection(db,"cars"));
@@ -224,22 +236,22 @@ async function loadCars(){
   snap.forEach(d=>{
     const c = d.data();
 
-    // 👉 只顯示上架
-    if (c.active === false) return;
+    // ❗只顯示上架
+    if(c.active === false) return;
 
     html += `
-    <div class="card">
+      <div class="card">
         <img src="${c.img}">
         <div class="card-body">
-            <div class="car-name">${c.name}</div>
-            <div class="price">${c.price}</div>
-            <div class="desc">${c.desc || ""}</div>
+          <div class="car-name">${c.name}</div>
+          <div class="price">${c.price}</div>
+          <div class="desc">${c.desc || ""}</div>
 
-            <a href="https://line.me/?text=我想詢問：${c.name}" target="_blank">
-              LINE詢問
-            </a>
+          <a href="https://line.me/?text=我想詢問：${c.name}" target="_blank">
+            LINE詢問
+          </a>
         </div>
-    </div>
+      </div>
     `;
   });
 
