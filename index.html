@@ -22,67 +22,62 @@ header{
   font-weight:bold;
 }
 
-/* 🔥 HERO（加大強化版） */
+/* 🔥 HERO（最佳平衡版） */
 .hero{
   width:100%;
-  height:460px; /* 🔥 更大（關鍵） */
+  height:500px; /* 🔥 加高避免壓縮感 */
 
   background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
 
+  /* 🔥 關鍵：避免裁掉重點 */
   background-size:cover;
   background-repeat:no-repeat;
+  background-position:center 15%;
 
-  /* 🔥 視覺重點往車頭 */
-  background-position:center 25%;
-
+  position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-
-  color:#fff;
   text-align:center;
-  position:relative;
+  color:#fff;
 }
 
-/* 🔥 漸層 */
+/* 🔥 安全遮罩（讓裁切不明顯） */
 .hero::after{
   content:"";
   position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  inset:0;
   background:linear-gradient(
     to bottom,
     rgba(0,0,0,0.25),
-    rgba(0,0,0,0.75)
+    rgba(0,0,0,0.7)
   );
 }
 
+/* 文字層 */
 .hero-content{
   position:relative;
   z-index:2;
 }
 
 .hero h1{
-  font-size:32px; /* 🔥 放大字 */
+  font-size:34px;
   margin-bottom:12px;
 }
 
-/* 🔥 LINE按鈕 */
+/* LINE按鈕 */
 .line-btn{
   display:inline-block;
-  padding:12px 20px;
+  padding:12px 22px;
   background:#00c300;
   color:#fff;
   border-radius:12px;
   text-decoration:none;
   font-weight:bold;
   box-shadow:0 4px 10px rgba(0,0,0,0.25);
-  font-size:16px;
 }
 
-/* 🔵 區塊 */
+/* 區塊 */
 .section{
   padding:25px 15px;
   max-width:1100px;
@@ -96,7 +91,7 @@ header{
   font-weight:bold;
 }
 
-/* 🔵 車輛 */
+/* 車輛 */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -152,7 +147,7 @@ header{
   font-size:13px;
 }
 
-/* 🔵 LINE固定按鈕 */
+/* LINE */
 .fixed-line{
   position:fixed;
   right:15px;
@@ -169,12 +164,12 @@ header{
 /* 📱 手機優化 */
 @media (max-width:768px){
   .hero{
-    height:360px; /* 🔥 手機也加大 */
+    height:380px;
     background-position:center top;
   }
 
   .hero h1{
-    font-size:24px;
+    font-size:26px;
   }
 }
 </style>
