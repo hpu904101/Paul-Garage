@@ -8,13 +8,8 @@
 body{
   margin:0;
   font-family:Arial;
-  background:#0f0f0f;
+  background:#111;
   color:white;
-}
-
-.center{
-  text-align:center;
-  margin-top:30px;
 }
 
 .container{
@@ -29,8 +24,8 @@ input{
   width:100%;
   padding:10px;
   margin:8px 0;
-  border:none;
   border-radius:6px;
+  border:none;
 }
 
 button{
@@ -50,19 +45,20 @@ button{
   margin-top:10px;
   border-radius:8px;
 }
+img{width:100px;}
 </style>
 </head>
 
 <body>
 
-<h1 class="center">車商後台 Dashboard</h1>
+<h2 style="text-align:center;">車商後台 Dashboard</h2>
 
 <div class="container">
   <h3>新增車輛</h3>
 
   <input id="name" placeholder="車名">
   <input id="price" placeholder="價格">
-  <input id="img" placeholder="圖片URL">
+  <input id="img" placeholder="圖片網址">
   <input id="desc" placeholder="配備 / 說明">
 
   <button onclick="addCar()">上架車輛</button>
@@ -78,9 +74,7 @@ button{
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
-  getAuth, 
-  onAuthStateChanged, 
-  signOut 
+  getAuth, signOut, onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 import {
@@ -103,22 +97,22 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔐 沒登入 → 踢回登入頁
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
+// 🔐 保護後台
+onAuthStateChanged(auth, (user)=>{
+  if(!user){
     window.location.href = "admin.html";
   }
 });
 
 // 🚪 登出
-window.logout = function () {
-  signOut(auth).then(() => {
+window.logout = function(){
+  signOut(auth).then(()=>{
     window.location.href = "admin.html";
   });
 };
 
-// 🚗 上架車輛
-window.addCar = async function () {
+// 🚗 上架車輛（圖片網址版）
+window.addCar = async function(){
 
   const name = document.getElementById("name").value;
   const price = document.getElementById("price").value;
@@ -126,46 +120,45 @@ window.addCar = async function () {
   const desc = document.getElementById("desc").value;
 
   if(!name || !price || !img){
-    alert("請填寫完整資料");
+    alert("請填完整資料");
     return;
   }
 
-  await addDoc(collection(db, "cars"), {
+  await addDoc(collection(db,"cars"),{
     name,
     price,
     img,
     desc,
-    active: true // ⭐ 預設上架
+    active:true
   });
 
   alert("上架成功");
 
-  // 清空欄位
-  document.getElementById("name").value = "";
-  document.getElementById("price").value = "";
-  document.getElementById("img").value = "";
-  document.getElementById("desc").value = "";
+  document.getElementById("name").value="";
+  document.getElementById("price").value="";
+  document.getElementById("img").value="";
+  document.getElementById("desc").value="";
 };
 
-// 📦 即時顯示車輛
+// 📦 列表
 const list = document.getElementById("list");
 
-onSnapshot(collection(db, "cars"), (snap) => {
+onSnapshot(collection(db,"cars"),(snap)=>{
 
-  list.innerHTML = "";
+  list.innerHTML="";
 
-  snap.forEach((d) => {
+  snap.forEach(d=>{
     const c = d.data();
 
-    list.innerHTML += `
+    list.innerHTML+=`
       <div class="car">
-        <img src="${c.img}" width="100"><br>
+        <img src="${c.img}"><br>
         <b>${c.name}</b><br>
         ${c.price}<br>
-        ${c.desc || ""}<br>
+        ${c.desc||""}<br>
 
-        <button onclick="toggleCar('${d.id}', ${c.active})">
-          ${c.active ? "下架" : "上架"}
+        <button onclick="toggleCar('${d.id}',${c.active})">
+          ${c.active?"下架":"上架"}
         </button>
 
         <button onclick="delCar('${d.id}')">刪除</button>
@@ -175,18 +168,17 @@ onSnapshot(collection(db, "cars"), (snap) => {
 
 });
 
-// 🔄 上下架
-window.toggleCar = async function(id, status){
-  await updateDoc(doc(db, "cars", id), {
-    active: !status
+// 上下架
+window.toggleCar = async function(id,status){
+  await updateDoc(doc(db,"cars",id),{
+    active:!status
   });
 };
 
-// ❌ 刪除
-window.delCar = async function (id) {
-
-  if(confirm("確定要刪除嗎？")){
-    await deleteDoc(doc(db, "cars", id));
+// 刪除
+window.delCar = async function(id){
+  if(confirm("確定刪除？")){
+    await deleteDoc(doc(db,"cars",id));
   }
 };
 
