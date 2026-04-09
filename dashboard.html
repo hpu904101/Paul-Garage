@@ -2,19 +2,25 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>車商後台</title>
+<title>Paul Garage 後台</title>
 
 <style>
 body{
   margin:0;
   font-family:Arial;
   background:#111;
-  color:white;
+  color:#fff;
+}
+
+h2{
+  text-align:center;
+  padding:15px;
 }
 
 .container{
-  width:500px;
-  margin:30px auto;
+  width:90%;
+  max-width:500px;
+  margin:20px auto;
   background:#1c1c1c;
   padding:20px;
   border-radius:10px;
@@ -24,20 +30,22 @@ input{
   width:100%;
   padding:10px;
   margin:8px 0;
-  border-radius:6px;
   border:none;
+  border-radius:6px;
 }
 
 button{
   width:100%;
   padding:10px;
-  margin-top:10px;
-  background:#00c300;
+  margin-top:8px;
   border:none;
-  color:white;
   border-radius:6px;
   cursor:pointer;
+  font-weight:bold;
 }
+
+.addBtn{background:#00c300;color:#fff;}
+.logoutBtn{background:#555;color:#fff;}
 
 .car{
   background:#2a2a2a;
@@ -45,29 +53,64 @@ button{
   margin-top:10px;
   border-radius:8px;
 }
-img{width:100px;}
+
+.car img{
+  width:100%;
+  border-radius:6px;
+}
+
+/* 修改視窗 */
+#editBox{
+  display:none;
+  position:fixed;
+  top:10%;
+  left:50%;
+  transform:translateX(-50%);
+  width:90%;
+  max-width:400px;
+  background:#222;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 0 20px rgba(0,0,0,0.5);
+  z-index:999;
+}
 </style>
 </head>
 
 <body>
 
-<h2 style="text-align:center;">車商後台 Dashboard</h2>
+<h2>🚗 車商後台 Dashboard</h2>
 
+<!-- 上架 -->
 <div class="container">
   <h3>新增車輛</h3>
 
   <input id="name" placeholder="車名">
   <input id="price" placeholder="價格">
   <input id="img" placeholder="圖片網址">
-  <input id="desc" placeholder="配備 / 說明">
+  <input id="desc" placeholder="描述">
 
-  <button onclick="addCar()">上架車輛</button>
-  <button onclick="logout()">登出</button>
+  <button class="addBtn" onclick="addCar()">上架車輛</button>
+  <button class="logoutBtn" onclick="logout()">登出</button>
 </div>
 
+<!-- 列表 -->
 <div class="container">
   <h3>車輛列表</h3>
   <div id="list"></div>
+</div>
+
+<!-- 修改 -->
+<div id="editBox">
+  <h3>修改車輛</h3>
+
+  <input id="eName" placeholder="車名">
+  <input id="ePrice" placeholder="價格">
+  <input id="eImg" placeholder="圖片網址">
+  <input id="eDesc" placeholder="描述">
+
+  <button style="background:#00c300;color:#fff;" onclick="saveEdit()">儲存修改</button>
+  <button style="background:#555;color:#fff;" onclick="closeEdit()">取消</button>
 </div>
 
 <script type="module">
@@ -81,10 +124,11 @@ import {
   getFirestore,
   collection,
   addDoc,
-  onSnapshot,
+  getDocs,
   deleteDoc,
+  updateDoc,
   doc,
-  updateDoc
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -97,50 +141,37 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔐 保護後台
-onAuthStateChanged(auth, (user)=>{
+// 🔐 登入檢查
+onAuthStateChanged(auth,(user)=>{
   if(!user){
-    window.location.href = "admin.html";
+    window.location.href="admin.html";
   }
 });
 
 // 🚪 登出
 window.logout = function(){
   signOut(auth).then(()=>{
-    window.location.href = "admin.html";
+    window.location.href="admin.html";
   });
 };
 
-// 🚗 上架車輛（圖片網址版）
+// 🚗 上架
 window.addCar = async function(){
 
-  const name = document.getElementById("name").value;
-  const price = document.getElementById("price").value;
-  const img = document.getElementById("img").value;
-  const desc = document.getElementById("desc").value;
-
-  if(!name || !price || !img){
-    alert("請填完整資料");
-    return;
-  }
+  const name = nameInput.value;
+  const price = priceInput.value;
+  const img = imgInput.value;
+  const desc = descInput.value;
 
   await addDoc(collection(db,"cars"),{
-    name,
-    price,
-    img,
-    desc,
+    name,price,img,desc,
     active:true
   });
 
   alert("上架成功");
-
-  document.getElementById("name").value="";
-  document.getElementById("price").value="";
-  document.getElementById("img").value="";
-  document.getElementById("desc").value="";
 };
 
-// 📦 列表
+// 📦 即時列表
 const list = document.getElementById("list");
 
 onSnapshot(collection(db,"cars"),(snap)=>{
@@ -150,36 +181,71 @@ onSnapshot(collection(db,"cars"),(snap)=>{
   snap.forEach(d=>{
     const c = d.data();
 
-    list.innerHTML+=`
+    list.innerHTML += `
       <div class="car">
-        <img src="${c.img}"><br>
+        <img src="${c.img}">
         <b>${c.name}</b><br>
         ${c.price}<br>
         ${c.desc||""}<br>
 
-        <button onclick="toggleCar('${d.id}',${c.active})">
-          ${c.active?"下架":"上架"}
+        <button onclick="openEdit('${d.id}','${c.name}','${c.price}','${c.img}','${c.desc||""}')">
+          修改
         </button>
 
-        <button onclick="delCar('${d.id}')">刪除</button>
+        <button onclick="toggle('${d.id}',${c.active})">
+          ${c.active ? "下架" : "上架"}
+        </button>
+
+        <button onclick="del('${d.id}')">刪除</button>
       </div>
     `;
   });
-
 });
 
-// 上下架
-window.toggleCar = async function(id,status){
+// 🔁 上下架
+window.toggle = async function(id,state){
   await updateDoc(doc(db,"cars",id),{
-    active:!status
+    active:!state
   });
 };
 
-// 刪除
-window.delCar = async function(id){
+// 🗑 刪除
+window.del = async function(id){
   if(confirm("確定刪除？")){
     await deleteDoc(doc(db,"cars",id));
   }
+};
+
+// ✏️ 開啟修改
+window.openEdit = function(id,name,price,img,desc){
+
+  window.editId = id;
+
+  document.getElementById("editBox").style.display="block";
+
+  eName.value = name;
+  ePrice.value = price;
+  eImg.value = img;
+  eDesc.value = desc;
+};
+
+// ❌ 關閉
+window.closeEdit = function(){
+  document.getElementById("editBox").style.display="none";
+};
+
+// 💾 儲存修改
+window.saveEdit = async function(){
+
+  await updateDoc(doc(db,"cars",window.editId),{
+    name:eName.value,
+    price:ePrice.value,
+    img:eImg.value,
+    desc:eDesc.value
+  });
+
+  alert("修改成功");
+  closeEdit();
 };
 
 </script>
