@@ -71,7 +71,6 @@ button{
   background:#222;
   padding:20px;
   border-radius:10px;
-  box-shadow:0 0 20px rgba(0,0,0,0.5);
   z-index:999;
 }
 </style>
@@ -81,7 +80,7 @@ button{
 
 <h2>🚗 車商後台 Dashboard</h2>
 
-<!-- 上架 -->
+<!-- 新增車輛 -->
 <div class="container">
   <h3>新增車輛</h3>
 
@@ -109,8 +108,8 @@ button{
   <input id="eImg" placeholder="圖片網址">
   <input id="eDesc" placeholder="描述">
 
-  <button style="background:#00c300;color:#fff;" onclick="saveEdit()">儲存修改</button>
-  <button style="background:#555;color:#fff;" onclick="closeEdit()">取消</button>
+  <button class="addBtn" onclick="saveEdit()">儲存修改</button>
+  <button class="logoutBtn" onclick="closeEdit()">取消</button>
 </div>
 
 <script type="module">
@@ -157,7 +156,7 @@ window.logout = async function(){
   window.location.href = "login.html";
 };
 
-/* 🚗 上架車輛（🔥已修好） */
+/* 🚗 上架車輛 */
 window.addCar = async function(){
 
   const name = document.getElementById("name").value;
@@ -180,7 +179,6 @@ window.addCar = async function(){
       time:Date.now()
     });
 
-    // 清空輸入
     document.getElementById("name").value = "";
     document.getElementById("price").value = "";
     document.getElementById("img").value = "";
@@ -189,7 +187,7 @@ window.addCar = async function(){
     alert("上架成功 🚗");
 
   }catch(err){
-    alert("上架失敗：" + err.message);
+    alert("失敗：" + err.message);
     console.log(err);
   }
 };
@@ -254,12 +252,10 @@ window.openEdit = function(id,name,price,img,desc){
   eDesc.value = desc;
 };
 
-/* ❌ 關閉 */
 window.closeEdit = function(){
   document.getElementById("editBox").style.display = "none";
 };
 
-/* 💾 儲存修改 */
 window.saveEdit = async function(){
 
   await updateDoc(doc(db,"cars",editId),{
