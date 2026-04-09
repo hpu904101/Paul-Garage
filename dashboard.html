@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>車商後台</title>
+</head>
+<body>
+
+<h2>車輛上架系統</h2>
+
+<input id="carName" placeholder="車名">
+<br><br>
+<input id="price" placeholder="價格">
+<br><br>
+<input id="image" placeholder="圖片網址">
+<br><br>
+
+<button onclick="addCar()">上架車輛</button>
+
+<h3>車輛列表</h3>
+<div id="list"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "你的APIKEY",
+  authDomain: "你的authDomain",
+  projectId: "你的projectId"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 上架車輛
+window.addCar = async function () {
+  await addDoc(collection(db, "cars"), {
+    name: carName.value,
+    price: price.value,
+    image: image.value
+  });
+
+  alert("上架成功");
+  loadCars();
+};
+
+// 讀取車輛
+async function loadCars() {
+  const querySnapshot = await getDocs(collection(db, "cars"));
+  let html = "";
+
+  querySnapshot.forEach((docItem) => {
+    html += `
+      <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h4>${docItem.data().name}</h4>
+        <p>${docItem.data().price}</p>
+        <img src="${docItem.data().image}" width="150">
+        <br>
+        <button onclick="deleteCar('${docItem.id}')">下架</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("list").innerHTML = html;
+}
+
+// 下架
+window.deleteCar = async function (id) {
+  await deleteDoc(doc(db, "cars", id));
+  loadCars();
+};
+
+loadCars();
+</script>
+
+</body>
+</html>
