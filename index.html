@@ -23,20 +23,34 @@ header{
     font-weight:bold;
 }
 
-/* 🔥 HERO（電腦版完整不裁切 + 變小） */
+/* 🔥 HERO（重點修正版） */
 .hero{
-    background:url("520413253_122128191266841841_517358859357023635_n.jpg") center/contain no-repeat;
+    background:#000;
+    position:relative;
 
-    /* 💻 電腦版：縮小重點 */
-    height:360px;
+    /* 💻 電腦版：讓圖片「變大但完整顯示」 */
+    height:520px;
 
     display:flex;
     align-items:center;
     justify-content:center;
-    color:#fff;
-    text-align:center;
-    position:relative;
-    background-color:#000;
+    overflow:hidden;
+}
+
+/* 背景圖片層 */
+.hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
+    background-repeat:no-repeat;
+    background-position:center;
+
+    /* 🔥 重點：完整顯示 + 放大 */
+    background-size:contain;
+
+    transform:scale(1.15); /* 👉 讓圖片「看起來變大」但不裁切 */
 }
 
 /* 漸層 */
@@ -47,19 +61,21 @@ header{
 
     background:linear-gradient(
         to bottom,
-        rgba(0,0,0,0.25),
-        rgba(0,0,0,0.75)
+        rgba(0,0,0,0.20),
+        rgba(0,0,0,0.70)
     );
 }
 
 /* 內容 */
 .hero-content{
     position:relative;
-    z-index:1;
+    z-index:2;
+    color:#fff;
+    text-align:center;
 }
 
 .hero h1{
-    font-size:28px;
+    font-size:32px;
     margin-bottom:10px;
 }
 
@@ -155,9 +171,12 @@ header{
 /* 📱 手機版 */
 @media (max-width:768px){
     .hero{
-        height:280px;
+        height:300px;
+    }
+
+    .hero::before{
         background-size:cover;
-        background-position:center;
+        transform:none;
     }
 
     .hero h1{
