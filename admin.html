@@ -1,40 +1,30 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<title>登入</title>
+import { auth } from "./firebase.js";
+import { 
+  signInWithEmailAndPassword,
+  onAuthStateChanged
+} from "firebase/auth";
 
-<style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#111;
-  color:white;
-  font-family:Arial;
-}
+// 🔥 監聽登入狀態（最重要）
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // 已登入 → 自動跳後台
+    window.location.href = "dashboard.html";
+  }
+});
 
-.box{
-  text-align:center;
-  background:#1c1c1c;
-  padding:40px;
-  border-radius:10px;
-  width:300px;
-}
+// 🔐 登入
+window.login = async () => {
 
-input{
-  width:100%;
-  padding:10px;
-  margin:10px 0;
-}
-</style>
-</head>
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-<body>
-
-<div class="box">
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    // ❗ 不要在這裡跳轉（交給監聽）
+  } catch (error) {
+    alert("登入失敗：" + error.message);
+  }
+};<div class="box">
   <h2>後台登入</h2>
 
   <input id="email" placeholder="Email">
