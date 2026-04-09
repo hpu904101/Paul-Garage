@@ -2,124 +2,108 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>車商後台</title>
+<title>後台</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0f0f0f;
-  color: white;
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0f0f0f;
+  color:white;
 }
 
-/* 置中標題 */
-.center {
-  text-align: center;
-  margin-top: 30px;
+.center{
+  text-align:center;
+  margin-top:30px;
 }
 
-.container {
-  width: 500px;
-  margin: 30px auto;
-  background: #1c1c1c;
-  padding: 20px;
-  border-radius: 10px;
+.box{
+  width:500px;
+  margin:30px auto;
+  background:#1c1c1c;
+  padding:20px;
+  border-radius:10px;
 }
 
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-.car {
-  background: #2a2a2a;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
+input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
 }
 </style>
 </head>
 
 <body>
 
-<h1 class="center">車商後台 Dashboard</h1>
+<h1 class="center">車輛後台</h1>
 
-<div class="container">
-  <h3>新增車輛</h3>
+<div class="box">
+  <h3>上架車輛</h3>
 
   <input id="name" placeholder="車名">
   <input id="price" placeholder="價格">
 
-  <button onclick="addCar()">上架車輛</button>
+  <button onclick="addCar()">上架</button>
 </div>
 
-<div class="container">
-  <h3>上架車輛列表</h3>
+<div class="box">
+  <h3>列表</h3>
   <div id="list"></div>
 </div>
 
 <script type="module">
 import { auth, db } from "./firebase.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signOut
+} from "firebase/auth";
+
 import {
   collection,
   addDoc,
+  onSnapshot,
   deleteDoc,
-  doc,
-  onSnapshot
+  doc
 } from "firebase/firestore";
 
-/* 防止未登入 */
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
+/* 🔥 防止未登入 */
+onAuthStateChanged(auth, (user)=>{
+  if(!user){
     window.location.href = "admin.html";
   }
 });
 
-/* 新增車輛 */
-window.addCar = async function () {
+/* 上架 */
+window.addCar = async () => {
   const name = document.getElementById("name").value;
   const price = document.getElementById("price").value;
 
-  await addDoc(collection(db, "cars"), {
+  await addDoc(collection(db,"cars"),{
     name,
     price,
-    created: Date.now()
+    time:Date.now()
   });
-
-  alert("上架成功");
 };
 
 /* 即時列表 */
 const list = document.getElementById("list");
 
-onSnapshot(collection(db, "cars"), (snap) => {
+onSnapshot(collection(db,"cars"),(snap)=>{
   list.innerHTML = "";
 
-  snap.forEach((docItem) => {
-    const data = docItem.data();
-
+  snap.forEach(d=>{
     list.innerHTML += `
-      <div class="car">
-        <div>${data.name}</div>
-        <div>${data.price}</div>
-        <button onclick="delCar('${docItem.id}')">下架</button>
+      <div style="padding:10px;background:#333;margin:5px;">
+        ${d.data().name} - ${d.data().price}
+        <button onclick="del('${d.id}')">下架</button>
       </div>
     `;
   });
 });
 
 /* 下架 */
-window.delCar = async function (id) {
-  await deleteDoc(doc(db, "cars", id));
+window.del = async (id)=>{
+  await deleteDoc(doc(db,"cars",id));
 };
 </script>
 
