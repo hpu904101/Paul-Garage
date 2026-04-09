@@ -16,16 +16,17 @@ body{
 header{
     background:#0f0f0f;
     color:#fff;
-    padding:18px;
+    padding:14px;
     text-align:center;
-    font-size:22px;
+    font-size:20px;
     font-weight:bold;
 }
 
+/* 🔥 HERO 縮小 */
 .hero{
     background:#000;
     position:relative;
-    height:520px;
+    height:380px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -39,11 +40,8 @@ header{
     background-image:url("520413253_122128191266841841_517358859357023635_n.jpg");
     background-repeat:no-repeat;
     background-position:center;
-
-    /* 🔥已修正：手機也會變大 */
     background-size:cover;
-
-    transform:scale(1.05);
+    transform:scale(1.08);
 }
 
 .hero::after{
@@ -61,103 +59,123 @@ header{
 }
 
 .hero h1{
-    font-size:32px;
+    font-size:24px;
+    margin:0;
 }
 
 .line-btn{
     display:inline-block;
-    padding:10px 16px;
+    margin-top:10px;
+    padding:8px 14px;
     background:#00c300;
     color:#fff;
     border-radius:8px;
     text-decoration:none;
+    font-size:14px;
 }
 
 .section{
-    padding:25px 15px;
+    padding:20px 12px;
     max-width:1100px;
     margin:auto;
 }
 
 .title{
     text-align:center;
-    font-size:22px;
-    margin-bottom:20px;
+    font-size:20px;
+    margin-bottom:15px;
     font-weight:bold;
 }
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-    gap:18px;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
 }
 
+/* 🔥 卡片縮小 */
 .card{
     background:#fff;
     border-radius:12px;
     overflow:hidden;
-    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+    box-shadow:0 3px 8px rgba(0,0,0,0.08);
 }
 
 .card img{
     width:100%;
-    height:180px;
+    height:150px;
     object-fit:cover;
 }
 
 .card-body{
-    padding:12px;
+    padding:10px;
 }
 
-.car-name{font-weight:bold;}
-.price{color:red;font-weight:bold;}
-.desc{font-size:13px;color:#666;}
+.car-name{
+    font-weight:bold;
+    font-size:15px;
+}
+
+.price{
+    color:red;
+    font-weight:bold;
+    font-size:14px;
+}
+
+.desc{
+    font-size:12px;
+    color:#666;
+}
 
 .card a{
     display:inline-block;
-    margin-top:10px;
+    margin-top:8px;
     background:#111;
     color:#fff;
-    padding:8px 10px;
+    padding:7px 10px;
     border-radius:6px;
     text-decoration:none;
+    font-size:12px;
 }
 
+/* LINE 按鈕 */
 .fixed-line{
     position:fixed;
-    right:15px;
-    bottom:15px;
+    right:12px;
+    bottom:12px;
     background:#00c300;
     color:#fff;
-    padding:12px 14px;
+    padding:10px 12px;
     border-radius:50px;
     text-decoration:none;
+    font-size:14px;
 }
 
+/* admin */
 .admin-btn{
     position:fixed;
-    top:15px;
-    right:15px;
+    top:12px;
+    right:12px;
     background:#111;
     color:#fff;
-    padding:10px 16px;
+    padding:8px 12px;
     border-radius:8px;
     text-decoration:none;
+    font-size:13px;
 }
 
-/* 📱手機優化 */
+/* 📱手機再微調 */
 @media (max-width:768px){
     .hero{
-        height:420px;
-    }
-
-    .hero::before{
-        background-size:cover;
-        transform:scale(1.15);
+        height:320px;
     }
 
     .hero h1{
-        font-size:24px;
+        font-size:20px;
+    }
+
+    .card img{
+        height:140px;
     }
 }
 </style>
@@ -220,7 +238,6 @@ async function loadCars(){
           <a target="_blank" href="https://line.me/ti/p/~k9527">
             LINE詢問
           </a>
-
         </div>
       </div>
     `;
