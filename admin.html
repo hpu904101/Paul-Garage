@@ -2,57 +2,68 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>後台登入</title>
+<title>車商後台登入</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial;
+  background: #111;
+  color: white;
+}
+
+.login-box {
+  text-align: center;
+  background: #1c1c1c;
+  padding: 40px;
+  border-radius: 12px;
+  width: 300px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-<h2>車商後台登入</h2>
+<div class="login-box">
+  <h2>車商後台登入</h2>
 
-<input id="email" placeholder="帳號">
-<br><br>
-<input id="password" type="password" placeholder="密碼">
-<br><br>
-<button onclick="login()">登入</button>
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="密碼">
+
+  <button onclick="login()">登入</button>
+</div>
 
 <script type="module">
+import { auth } from "./firebase.js";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBMRylaUJ3dI7KeA7vKN0FWPADnElPgIbY",
-  authDomain: "paul-garage.firebaseapp.com",
-  databaseURL: "https://paul-garage-default-rtdb.firebaseio.com",
-  projectId: "paul-garage"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// 🔥 已登入直接進後台
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    window.location.href = "dashboard.html";
-  }
-});
-
-// 🔐 登入
-window.login = function () {
-
+window.login = async function () {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("登入成功");
-      window.location.href = "dashboard.html";
-    })
-    .catch(() => {
-      alert("登入失敗");
-    });
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+  } catch (err) {
+    alert("登入失敗：" + err.message);
+  }
 };
-
 </script>
 
 </body>
